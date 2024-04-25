@@ -5,6 +5,14 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Name of the person triggering the workflow'
+        required: true
+      home:
+        description: 'Home location of the person triggering the workflow'
+        required: false
 
 jobs:
   build:
