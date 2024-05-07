@@ -42,7 +42,7 @@ def login(request):
 
         if user_authenticated:
             # Return success message
-            return JsonResponse({'message': 'Login successful'})
+            return JsonResponse({'data': [], 'message': 'Login successful'})
         else:
             # Return error message
             return JsonResponse({'error': 'Invalid username or password'}, status=400)
