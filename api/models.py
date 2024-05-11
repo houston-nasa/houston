@@ -14,3 +14,11 @@ class HoustonUser(AbstractUser):
     ])
     last_name = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
+
+    def json(self):
+        return {
+            'id': self.id,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'email': self.email
+        }
