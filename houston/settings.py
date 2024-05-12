@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # 👇 Add here your installed app's
     "rest_framework",
+    "rest_framework.authtoken",
     "corsheaders",
     "api",
 ]
@@ -114,6 +115,13 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.TokenAuthentication",
+    ],
+    'EXCEPTION_HANDLER': 'api.utils.exceptions.custom_exception_handler',
+}
 
 
 # Internationalization

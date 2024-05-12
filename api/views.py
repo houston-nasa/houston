@@ -1,13 +1,15 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from api.models import HoustonUser
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
 import json
-from api.const import Status
-
 
 @api_view(["GET"])
 def index(request):
@@ -49,24 +51,44 @@ def login(request):
         email = data.get("email")
         password = data.get("password")
 
-        # Perform authentication (You can use Django's built-in authentication system or custom authentication logic)
+        # Perform authentication
         user = authenticate(request, username=email, password=password)
         response = {"data": {}, "error": []}
-        status = Status.OK
+        res_status = status.HTTP_200_OK
 
         if user:
             # Return success message
+            token, created = Token.objects.get_or_create(user=user)
             response["data"] = {
-                "auth_token": "abc123",
-                "user": user.json(),
+                "token": token.key,
+                "profile": user.json(),
                 "message": "Login successful",
             }
         else:
             # Return error message
             response["error"] = ["Invalid username or password"]
-            status = Status.BAD_REQUEST
+            res_status = status.HTTP_400_BAD_REQUEST
     except Exception as e:
         response["error"] = [str(e)]
-        status = Status.INTERNAL_SERVER_ERROR
+        res_status = status.HTTP_500_INTERNAL_SERVER_ERROR
 
-    return JsonResponse(response, status=status)
+    return JsonResponse(response, status=res_status)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def logout(request):
+    response = {
+        "status": status.HTTP_200_OK,
+        "data": {},
+        "error": [],
+    }
+
+    try:
+        # Remove or invalidate the user's token
+        request.user.auth_token.delete()
+        response["data"] = {"message": "Logout successful"}
+    except Exception as e:
+        response["status"] = status.HTTP_500_INTERNAL_SERVER_ERROR
+        response["error"] = [str(e)]
+
+    return JsonResponse(response, status=response["status"])
