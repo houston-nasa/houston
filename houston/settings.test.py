@@ -93,28 +93,19 @@ WSGI_APPLICATION = "houston.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if os.environ.get('ENVIRON', 'TEST') == 'PROD':
-    DATABASES = {
-        "default": dj_database_url.config(conn_max_age=600),
-        "OPTIONS": {
-            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.mysql",
-            "NAME": "houston",
-            "USER": "root",
-            "PASSWORD": "avinash1",
-            "HOST": "db",
-            "PORT": "3306",
-        },
-        "OPTIONS": {
-            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-        },
-    }
-
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "houston",
+        "USER": "root",
+        "PASSWORD": "avinash1",
+        "HOST": "localhost",
+        "PORT": "3306",
+    },
+    "OPTIONS": {
+        "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
