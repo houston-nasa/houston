@@ -1,0 +1,29 @@
+services:
+  web:
+    build: .
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: mysql:8
+    container_name: db
+    restart: always
+    healthcheck:
+      test: ['CMD-SHELL', 'mysqladmin ping -h localhost -u root --password="avinash1" --silent']
+      interval: 3s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=houston
+      - MYSQL_ROOT_PASSWORD=avinash1
+    expose:
+      - 3306
+
+volumes:
+  mysql-data:
