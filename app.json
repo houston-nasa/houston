@@ -1,0 +1,14 @@
+{
+    "name": "houston-api",
+    "description": "RESTful APIs for Houston",
+    "env": {
+      "DJANGO_SETTINGS_MODULE": "houston.settings"
+    },
+    "environments": {
+      "test": {
+        "scripts": {
+            "test": "./manage.py test --debug-mode"
+        }
+    }
+  }
+}
