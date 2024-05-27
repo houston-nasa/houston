@@ -100,6 +100,7 @@ if os.environ.get('ENVIRON', 'TEST') == 'PROD':
             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
         },
     }
+    DATABASES["default"]["TEST"] = {"NAME": "tvhflczcibw63si5"}
 else:
     DATABASES = {
         "default": {

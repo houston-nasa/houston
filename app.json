@@ -1,6 +1,7 @@
 {
     "name": "houston-api",
     "description": "RESTful APIs for Houston",
+    "buildpacks": [{ "url": "heroku/python" }],
     "env": {
       "DJANGO_SETTINGS_MODULE": "houston.settings"
     },
