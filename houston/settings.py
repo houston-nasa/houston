@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import dj_database_url
 import os
+from dotenv import load_dotenv
+
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,16 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-hy#a)+m9w%ri)kbvj289^lev3ij2#l%uj=883j$a9qk0%6rkgx"
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-hy#a)+m9w%ri)kbvj289^lev3ij2#l%uj=883j$a9qk0%6rkgx")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    "houston-api-62c486d3c242.herokuapp.com",
-    "localhost",
-    "127.0.0.1",
-]
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "").split(',')
 
 
 # Application definition
@@ -62,12 +63,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-CORS_ORIGIN_WHITELIST = [
-    'http://localhost:3000',
-    'http://localhost:8000',
-    'http://localhost:8080',
-    'http://127.0.0.1:8000',
-]
+CORS_ORIGIN_WHITELIST = os.getenv("DJANGO_CORS_ORIGIN_WHITELIST", "").split(',')
 
 ROOT_URLCONF = "houston.urls"
 
