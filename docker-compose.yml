@@ -6,26 +6,13 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
+      - ./certs:/root/.postgresql
     depends_on:
-      db:
-        condition: service_healthy
+      - wait_for_db
 
-  db:
-    image: mysql:8
-    container_name: db
-    restart: always
-    healthcheck:
-      test: ['CMD-SHELL', 'mysqladmin ping -h localhost -u root --password="avinash1" --silent']
-      interval: 3s
-      retries: 5
-      start_period: 30s
-    volumes:
-      - mysql-data:/var/lib/mysql
+  wait_for_db:
+    image: busybox
+    command: /bin/sh -c "until nc -z ${DB_HOST} ${DB_PORT}; do echo waiting for database; sleep 3; done;"
     environment:
-      - MYSQL_DATABASE=houston
-      - MYSQL_ROOT_PASSWORD=avinash1
-    expose:
-      - 3306
-
-volumes:
-  mysql-data:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
