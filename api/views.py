@@ -19,28 +19,41 @@ def index(request):
 @csrf_exempt
 @api_view(["POST"])
 def register(request):
+    response = {
+        "status": status.HTTP_200_OK,
+        "data": {},
+        "error": [],
+    }
     try:
         data = json.loads(request.body)
-        first_name = data.get("first_name")
-        last_name = data.get("last_name")
+        first_name = data.get("firstName")
+        last_name = data.get("lastName")
         email = data.get("email")
         password = data.get("password")
         # You may add additional fields such as email, first_name, last_name, etc.
         if email and password:
-            user = HoustonUser.objects.create_user(
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                username=email,
-                password=password,
-            )
-            return JsonResponse({"message": "User registered successfully"}, status=201)
+            # Check if username (email) already exists
+            if HoustonUser.objects.filter(username=email).exists():
+                response["status"] = status.HTTP_400_BAD_REQUEST
+                response["error"] = ["Email already exists"]
+            else:
+                user = HoustonUser.objects.create_user(
+                    first_name=first_name,
+                    last_name=last_name,
+                    email=email,
+                    username=email,
+                    password=password,
+                )
+                response["data"] = {"message": "User registered successfully"}
+                response["status"] = status.HTTP_201_CREATED
         else:
-            return JsonResponse(
-                {"error": "Email and Password are required"}, status=400
-            )
+            response["status"] = status.HTTP_400_BAD_REQUEST
+            response["error"] = ["Email and Password are required"]
     except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        response["status"] = status.HTTP_500_INTERNAL_SERVER_ERROR
+        response["error"] = [str(e)]
+
+    return JsonResponse(response, status=response["status"])
 
 
 @api_view(["POST"])
