@@ -23,6 +23,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy project files to the working directory
 COPY . /app/
 
+# Copy certificates
+COPY certs/root.crt /app/.postgresql/root.crt
+
 # Run Django migrations and start the development server
 # CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
 
