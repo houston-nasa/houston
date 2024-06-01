@@ -31,4 +31,4 @@ COPY . /app/
 
 # Run gunicorn
 # CMD ["gunicorn", "houston.wsgi:application", "--bind", "0.0.0.0", "--log-file", "-"]
-CMD gunicorn houston.wsgi --bind 0.0.0.0:$PORT
+CMD python manage.py migrate && gunicorn houston.wsgi --bind 0.0.0.0:$PORT
