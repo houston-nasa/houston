@@ -29,9 +29,9 @@ COPY certs/root.crt /app/.postgresql/root.crt
 # Run Django migrations and start the development server
 # CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
 
-# Make port 8000 available to the world outside this container
-# EXPOSE 8000
-
 # Run gunicorn
 # CMD ["gunicorn", "houston.wsgi:application", "--bind", "0.0.0.0", "--log-file", "-"]
 CMD python manage.py migrate && gunicorn houston.wsgi --bind 0.0.0.0:$PORT
+
+# Make port 8000 available to the world outside this container
+EXPOSE 8000
