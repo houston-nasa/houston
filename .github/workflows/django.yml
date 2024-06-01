@@ -32,3 +32,6 @@ jobs:
 
     - name: Release Docker image on Heroku
       run: heroku container:release web -a $APP_NAME
+
+    - name: Run database migrations
+      run: heroku run python manage.py migrate -a $APP_NAME
