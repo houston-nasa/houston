@@ -7,9 +7,6 @@
     },
     "environments": {
       "test": {
-        "env": {
-            "DJANGO_SETTINGS_MODULE": "houston.settings_test"
-        },
         "scripts": {
             "test": "./manage.py test --debug-mode"
         }
