@@ -46,6 +46,32 @@ class GithubToken(models.Model):
             "owner": self.owner,
         }
 
+class GithubCred(models.Model):
+    user = models.ForeignKey(HoustonUser, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100, unique=True)
+    desc = models.TextField(null=True, blank=True)
+    token = models.CharField(max_length=250)
+    owner = models.CharField(max_length=100)
+    repo = models.CharField(max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["owner", "repo"], name="unique_github_cred")
+        ]
+
+    def json(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "desc": self.desc,
+            "user": self.user.json(),
+            "token": self.token,
+            "owner": self.owner,
+            "repo": self.repo,
+        }
+
 
 class GithubRepo(models.Model):
     user = models.ForeignKey(HoustonUser, on_delete=models.CASCADE)

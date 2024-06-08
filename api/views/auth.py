@@ -9,7 +9,7 @@ from api.models import HoustonUser
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
-from .serializers import HoustonUserSerializer
+from api.serializers import HoustonUserSerializer
 import json
 
 @api_view(["GET"])
