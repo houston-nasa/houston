@@ -7,13 +7,19 @@ class GithubTokenSerializer(serializers.ModelSerializer):
         fields = ['owner', 'token']
 
 class GithubCredSerializer(serializers.ModelSerializer):
+    pk = serializers.SerializerMethodField()
+
     class Meta:
         model = GithubCred
-        fields = ['id', 'name', 'desc', 'token', 'owner', 'repo']
+        fields = ['pk', 'name', 'desc', 'token', 'owner', 'repo']
+
+    # Define a method to compute the value for the static field
+    def get_pk(self, obj):
+        return str(obj.id)
 
 class HoustonUserSerializer(serializers.ModelSerializer):
-    github_creds = GithubCredSerializer(source='githubcred_set', many=True, read_only=True)  # Nested serializer for GithubCred
+    # github_creds = GithubCredSerializer(source='githubcred_set', many=True, read_only=True)  # Nested serializer for GithubCred
 
     class Meta:
         model = HoustonUser
-        fields = ['id', 'first_name', 'last_name', 'email', 'github_creds']  # Include GitHub tokens in the response
+        fields = ['id', 'first_name', 'last_name', 'email']  # Include GitHub tokens in the response

@@ -54,3 +54,31 @@ def create(request):
         response["error"] = [str(e)]
     
     return JsonResponse(response, status=response["status"])
+
+@api_view(["DELETE"])
+@permission_classes([IsAuthenticated])
+def delete(request, id):
+    """
+    Delete a GitHub repository.
+    """
+    response = {
+        "status": status.HTTP_200_OK,
+        "data": {},
+        "message": "",
+        "error": [],
+    }
+
+    try:
+        user = request.user
+        repo = GithubCred.objects.get(user=user, id=id)
+        repo.delete()
+        response["data"] = { "pk": str(id) }
+        response["message"] = "GitHub repository deleted successfully"
+    except GithubCred.DoesNotExist:
+        response["status"] = status.HTTP_404_NOT_FOUND
+        response["error"] = "GitHub repository not found"
+    except Exception as e:
+        response["status"] = status.HTTP_500_INTERNAL_SERVER_ERROR
+        response["error"] = str(e)
+    
+    return JsonResponse(response, status=response["status"])
